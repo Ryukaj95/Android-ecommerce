@@ -1,8 +1,23 @@
 package com.example.archimede.ecommerce2.data;
 
-/**
- * Created by archimede on 05/07/17.
- */
+public class UserRequest{
+    private String email;
+    private String password;
 
-class UserRequest {
+    public UserRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }
