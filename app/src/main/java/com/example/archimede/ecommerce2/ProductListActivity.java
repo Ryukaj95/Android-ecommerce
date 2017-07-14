@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.archimede.ecommerce2.data.CategoryAdapter;
+import com.example.archimede.ecommerce2.data.EcommerceOpenHelper;
 import com.example.archimede.ecommerce2.data.OnAdapterItemClickListener;
 import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.ProductAdapter;
@@ -24,23 +25,23 @@ public class ProductListActivity extends AppCompatActivity implements OnAdapterI
 
     private RecyclerView rView;
     private List<Product> productList;
+    private EcommerceOpenHelper mDB;
+    private ProductAdapter productAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
-
+        mDB = new EcommerceOpenHelper(this);
 
         rView = (RecyclerView)findViewById(R.id.products_recycler_view);
 
         GridLayoutManager layout = new GridLayoutManager(this, 1);
         rView.setLayoutManager(layout);
 
-        productList = new ArrayList<>();
-        for (int i = 0; i < 21; i++) {
-            productList.add(new Product("Titolo", "Descrizione poco poco corta", 3.10, "http://writingexercises.co.uk/images2/randomimage/boat.jpg"));
-        }
+        int categoryID = getIntent().getIntExtra("categoryID", -1);
 
-        ProductAdapter productAdapter = new ProductAdapter(productList, this);
+        productList = mDB.getAllProducts(1);
+        productAdapter = new ProductAdapter(productList, this);
         rView.setAdapter(productAdapter);
 
     }
@@ -51,17 +52,46 @@ public class ProductListActivity extends AppCompatActivity implements OnAdapterI
     }
 
     @Override
-    public void OnItemBuyClick(int position) {
-        Snackbar mySnackbar = Snackbar.make(rView,
-                "Aggiunto al carrello", Snackbar.LENGTH_SHORT);
-        mySnackbar.setAction("annulla" , new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Log.d("Item buy action: ", "annullato");
-            }
-        });
-        mySnackbar.show();
+    public void OnItemBuyClick(final int position) {
+        final ShoppingCart sc = ShoppingCart.getInstance();
+        final Product product = productList.get(position);
+        Snackbar mySnackbar;
 
+        if (sc.isAvailable(product, 1)){
+            if (sc.getCart().contains(product)){
+                mySnackbar = Snackbar.make(rView,
+                        "Aggiunto al carrello. Presenti: " + String.valueOf(
+                                sc.getProduct(position).getQuantity() + 1), 3000);
+                mySnackbar.setAction("annulla", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("Item add action: ", "annullato");
+                        sc.decreaseAnArticle(product);
+                        productAdapter.notifyItemChanged(position);
+                    }
+                });
+
+            } else {
+                mySnackbar = Snackbar.make(rView,
+                        "Aggiunto al carrello un nuovo prodotto", 2000);
+                mySnackbar.setAction("annulla", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("Item buy action: ", "annullato");
+                        sc.removeProduct(product);
+                        productAdapter.notifyItemChanged(position);
+                    }
+                });
+            }
+            sc.addProduct(product);
+            productAdapter.notifyItemChanged(position);
+
+        } else {
+            mySnackbar = Snackbar.make(rView,
+                    "L'oggetto non è attualmente disponibile", 2000);
+        }
+
+        mySnackbar.show();
     }
 
     @Override
@@ -75,5 +105,10 @@ public class ProductListActivity extends AppCompatActivity implements OnAdapterI
             Log.d("Bookmark action: ", "aggiunto");
             productList.get(position).setBookmark(true);
         }
+    }
+
+    @Override
+    public void OnRemoveCartItem(int position) {
+
     }
 }

@@ -3,7 +3,6 @@ package com.example.archimede.ecommerce2;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -32,9 +31,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.archimede.ecommerce2.data.Category;
-import com.example.archimede.ecommerce2.data.Item;
-import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.User;
 import com.example.archimede.ecommerce2.data.UserRequest;
 import com.example.archimede.ecommerce2.network.EcommerceService;

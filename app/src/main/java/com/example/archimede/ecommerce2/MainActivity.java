@@ -14,9 +14,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
+import com.example.archimede.ecommerce2.data.CartProductAdapter;
 import com.example.archimede.ecommerce2.data.Category;
 import com.example.archimede.ecommerce2.data.CategoryAdapter;
+import com.example.archimede.ecommerce2.data.EcommerceOpenHelper;
 import com.example.archimede.ecommerce2.data.OnAdapterItemClickListener;
 import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.User;
@@ -39,11 +42,16 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
     private List<Category> categoryList = new ArrayList<>();
 
     private CategoryTask mTask = null;
+    private EcommerceOpenHelper mDB;
+
+    private ProgressBar progressBarCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDB = new EcommerceOpenHelper(this);
         setContentView(R.layout.activity_main);
+        progressBarCategory = (ProgressBar)findViewById(R.id.progressBarCategory);
 
         preferences = getSharedPreferences("ecommerce",MODE_PRIVATE);
 
@@ -51,9 +59,8 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
 
         rView = (RecyclerView)findViewById(R.id.objs_recycler_view);
 
-        mTask = new CategoryTask();
-
-        mTask.execute((Void) null);
+//        mTask = new CategoryTask();
+//        mTask.execute((Void) null);
 
         if (first_launch){
             SharedPreferences.Editor editor = preferences.edit();
@@ -71,14 +78,15 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         rView.setLayoutManager(mLayoutManager);
 
+        categoryList = mDB.getAllCategories();
 
 
 //        for (int i = 0; i < 21; i++) {
 //            categoryList.add(new Category("Title", "Image", "Description"));
 //        }
 
-//        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryList, this);
-//        rView.setAdapter(categoryAdapter);
+        CategoryAdapter categoryAdapter = new CategoryAdapter(categoryList, this);
+        rView.setAdapter(categoryAdapter);
     }
 
     @Override
@@ -96,6 +104,11 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
 
     @Override
     public void OnItemBookmarkClick(int position) {
+
+    }
+
+    @Override
+    public void OnRemoveCartItem(int position) {
 
     }
 
@@ -124,12 +137,18 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
     }
 
     public void buttonOnClick(View view) {
-        preferences = getSharedPreferences("ecommerce",MODE_PRIVATE);
+        Intent i = new Intent(this, CartActivity.class);
+        startActivity(i);
 
-        boolean b = preferences.getBoolean("firstUser",true);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("firstUser",!b);
-        editor.apply();
+//        Intent productIntent = new Intent(this, ProductListActivity.class);
+//        startActivity(productIntent);
+
+//        preferences = getSharedPreferences("ecommerce",MODE_PRIVATE);
+//
+//        boolean b = preferences.getBoolean("firstUser",true);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("firstUser",!b);
+//        editor.apply();
     }
 
     public class CategoryTask extends AsyncTask < Void, Void, List<Category>> {
@@ -149,7 +168,10 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
                 Response<List<Category>> listResponse = listCall.execute();
 
                 if (listResponse.isSuccessful()) {
-                    return listResponse.body();
+                    for (Category category : listResponse.body()) {
+                        mDB.AddOrUpdate(category);
+                    }
+                    return mDB.getAllCategories();
                 }
             }catch (IOException e){
                 e.printStackTrace();
@@ -166,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
                 return;
             }
 
+            progressBarCategory.setVisibility(View.VISIBLE);
             categoryList = categories;
             CategoryAdapter categoriesAdapter = new CategoryAdapter(categoryList, MainActivity.this);
             rView.setAdapter(categoriesAdapter);

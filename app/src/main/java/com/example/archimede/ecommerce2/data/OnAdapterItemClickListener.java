@@ -9,4 +9,5 @@ public interface OnAdapterItemClickListener {
     void OnItemClick(int position);
     void OnItemBuyClick(int position);
     void OnItemBookmarkClick(int position);
+    void OnRemoveCartItem(int position);
 }

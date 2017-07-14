@@ -5,7 +5,7 @@ package com.example.archimede.ecommerce2.data;
  */
 
 public class  Category {
-    private int ID;
+    private int Id;
     private String title;
     private String image;
     private String description;
@@ -17,7 +17,7 @@ public class  Category {
 
         Category category = (Category) o;
 
-        if (ID != category.ID) return false;
+        if (Id != category.Id) return false;
         if (title != null ? !title.equals(category.title) : category.title != null) return false;
         if (image != null ? !image.equals(category.image) : category.image != null) return false;
         return description != null ? description.equals(category.description) : category.description == null;
@@ -26,17 +26,20 @@ public class  Category {
 
     @Override
     public int hashCode() {
-        int result = ID;
+        int result = Id;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (image != null ? image.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
 
+    public Category() {
+    }
+
     @Override
     public String toString() {
         return "Category{" +
-                "ID=" + ID +
+                "ID=" + Id +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
@@ -75,20 +78,20 @@ public class  Category {
         this.description = description;
     }
 
-    public Category(int ID, String title, String image, String description) {
-        this.ID = ID;
+    public Category(int Id, String title, String image, String description) {
+        this.Id = Id;
         this.title = title;
         this.image = image;
         this.description = description;
     }
 
-    public int getID() {
+    public int getId() {
 
-        return ID;
+        return Id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int Id) {
+        this.Id = Id;
     }
 }
 

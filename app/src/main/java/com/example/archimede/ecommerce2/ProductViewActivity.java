@@ -11,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.archimede.ecommerce2.data.OnAdapterItemClickListener;
 import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.ProductAdapter;
 import com.squareup.picasso.Picasso;
 
-public class ProductViewActivity extends AppCompatActivity {
+public class ProductViewActivity extends AppCompatActivity implements OnAdapterItemClickListener {
 
     private TextView name;
     private TextView shortDesc;
@@ -43,6 +44,26 @@ public class ProductViewActivity extends AppCompatActivity {
 
         Product product = new Product("Titolo","Descrizione",30.50, "http://writingexercises.co.uk/images2/randomimage/boat.jpg");
 
-        Picasso.with(this).load(product.getImage()).into(image);
+        Picasso.with(this).load(product.getImagePath()).into(image);
+    }
+
+    @Override
+    public void OnItemClick(int position) {
+
+    }
+
+    @Override
+    public void OnItemBuyClick(int position) {
+
+    }
+
+    @Override
+    public void OnItemBookmarkClick(int position) {
+
+    }
+
+    @Override
+    public void OnRemoveCartItem(int position) {
+
     }
 }

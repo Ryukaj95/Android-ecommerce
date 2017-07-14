@@ -7,11 +7,20 @@
     android:orientation="vertical"
     tools:context="com.example.archimede.ecommerce2.MainActivity">
 
-    <Button
+    <ProgressBar
+        android:id="@+id/progressBarCategory"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
-        android:onClick="buttonOnClick"/>
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/openCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="buttonOnClick"
+        android:text="Carrello"
+        tools:text="Carrello" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/objs_recycler_view"
