@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/MENU_OPEN_CART"
+        android:title="Open Cart"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/MENU_LOGOUT"
+        android:title="Logout"
+        />
+</menu>

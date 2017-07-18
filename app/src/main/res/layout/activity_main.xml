@@ -14,14 +14,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/openCart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="buttonOnClick"
-        android:text="Carrello"
-        tools:text="Carrello" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/objs_recycler_view"
 

@@ -119,6 +119,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         }
     }
 
+    public Product getProduct(int index){
+        if (mDataset.size() >= index){
+            return mDataset.get(index);
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
 
 
 }

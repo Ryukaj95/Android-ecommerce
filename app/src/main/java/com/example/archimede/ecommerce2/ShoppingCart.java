@@ -3,6 +3,7 @@ package com.example.archimede.ecommerce2;
 import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.ShoppingCartProduct;
 
+import java.net.PortUnreachableException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,7 @@ public class ShoppingCart {
     }
 
     public void decreaseAnArticle(Product product){
-        int indexProduct = getCart().indexOf(product);
+        int indexProduct = cart.indexOf(product);
         getProduct(indexProduct).modifyQuantity(-1);
     }
 
@@ -84,6 +85,13 @@ public class ShoppingCart {
     public ShoppingCartProduct getProduct(int position){
         if (!this.getCart().isEmpty() && position != -1 ){
             return this.cart.get(position);
+        }
+        return null;
+    }
+
+    public ShoppingCartProduct getProduct(Product product){
+        if (cart.contains(product)){
+            return getProduct(cart.indexOf(product));
         }
         return null;
     }

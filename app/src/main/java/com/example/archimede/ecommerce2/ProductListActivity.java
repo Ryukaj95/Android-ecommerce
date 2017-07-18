@@ -1,27 +1,20 @@
 package com.example.archimede.ecommerce2;
 
-import android.content.Context;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.archimede.ecommerce2.data.CategoryAdapter;
 import com.example.archimede.ecommerce2.data.EcommerceOpenHelper;
 import com.example.archimede.ecommerce2.data.OnAdapterItemClickListener;
 import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.ProductAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ProductListActivity extends AppCompatActivity implements OnAdapterItemClickListener {
+public class ProductListActivity extends BaseActivity implements OnAdapterItemClickListener {
 
     private RecyclerView rView;
     private List<Product> productList;
@@ -61,7 +54,7 @@ public class ProductListActivity extends AppCompatActivity implements OnAdapterI
             if (sc.getCart().contains(product)){
                 mySnackbar = Snackbar.make(rView,
                         "Aggiunto al carrello. Presenti: " + String.valueOf(
-                                sc.getProduct(position).getQuantity() + 1), 3000);
+                                sc.getProduct(productAdapter.getProduct(position)).getQuantity() + 1), 3000);
                 mySnackbar.setAction("annulla", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

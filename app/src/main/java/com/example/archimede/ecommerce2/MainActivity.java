@@ -4,26 +4,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.util.AsyncListUtil;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.example.archimede.ecommerce2.data.CartProductAdapter;
 import com.example.archimede.ecommerce2.data.Category;
 import com.example.archimede.ecommerce2.data.CategoryAdapter;
 import com.example.archimede.ecommerce2.data.EcommerceOpenHelper;
 import com.example.archimede.ecommerce2.data.OnAdapterItemClickListener;
-import com.example.archimede.ecommerce2.data.Product;
-import com.example.archimede.ecommerce2.data.User;
-import com.example.archimede.ecommerce2.data.UserRequest;
 import com.example.archimede.ecommerce2.network.EcommerceService;
 
 import java.io.IOException;
@@ -35,7 +27,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements OnAdapterItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener{
+public class MainActivity extends BaseActivity implements OnAdapterItemClickListener, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private RecyclerView rView;
     private SharedPreferences preferences;
@@ -71,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
                     "Benvenuto ! Questa è la prima volta che apri questa applicazione", 10000);
             mySnackbar.show();
         }
-
 
         GridLayoutManager layout = new GridLayoutManager(this, 2);
 
@@ -136,19 +127,9 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
         mySnackbar.show();
     }
 
-    public void buttonOnClick(View view) {
+    public void openCart(View view) {
         Intent i = new Intent(this, CartActivity.class);
         startActivity(i);
-
-//        Intent productIntent = new Intent(this, ProductListActivity.class);
-//        startActivity(productIntent);
-
-//        preferences = getSharedPreferences("ecommerce",MODE_PRIVATE);
-//
-//        boolean b = preferences.getBoolean("firstUser",true);
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putBoolean("firstUser",!b);
-//        editor.apply();
     }
 
     public class CategoryTask extends AsyncTask < Void, Void, List<Category>> {
@@ -180,6 +161,8 @@ public class MainActivity extends AppCompatActivity implements OnAdapterItemClic
 
             return null;
         }
+
+
 
         @Override
         protected void onPostExecute(List<Category> categories) {

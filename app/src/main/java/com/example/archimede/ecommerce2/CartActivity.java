@@ -2,39 +2,33 @@ package com.example.archimede.ecommerce2;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.archimede.ecommerce2.data.CartProductAdapter;
-import com.example.archimede.ecommerce2.data.Category;
-import com.example.archimede.ecommerce2.data.CategoryAdapter;
 import com.example.archimede.ecommerce2.data.OnAdapterItemClickListener;
 import com.example.archimede.ecommerce2.data.OnCartAdapterUpdate;
-import com.example.archimede.ecommerce2.data.Product;
 import com.example.archimede.ecommerce2.data.ShoppingCartProduct;
 
-import org.w3c.dom.Text;
-
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by archimede on 12/07/17.
  */
 
-public class CartActivity extends AppCompatActivity implements OnAdapterItemClickListener, OnCartAdapterUpdate {
+public class CartActivity extends BaseActivity implements OnAdapterItemClickListener, OnCartAdapterUpdate {
+
+    private static final int MENU_CLEAR_CART = Menu.FIRST;
 
     private RecyclerView rView;
     private NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.ITALY);
@@ -78,6 +72,24 @@ public class CartActivity extends AppCompatActivity implements OnAdapterItemClic
     @Override
     public void OnRemoveCartItem(int position) {
         totalPrice.setText(nf.format(ShoppingCart.getInstance().getTotalCart()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.removeItem(R.id.MENU_OPEN_CART);
+        menu.add(0, MENU_CLEAR_CART, Menu.NONE, "Clear the cart");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case MENU_CLEAR_CART:
+                clearCart();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -135,5 +147,26 @@ public class CartActivity extends AppCompatActivity implements OnAdapterItemClic
 
     private void refreshTotalPrice(){
         totalPrice.setText(nf.format(ShoppingCart.getInstance().getTotalCart()));
+    }
+
+    private void clearCart(){
+        final AlertDialog alertDialog = new AlertDialog.Builder(CartActivity.this).create();
+        alertDialog.setTitle("Attenzione !");
+        alertDialog.setMessage("Stai per svuotare l'intero carrello. Continuare con l'operazione ?");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ShoppingCart.getInstance().emptyCart();
+                refreshTotalPrice();
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Annulla", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }
